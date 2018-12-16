@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartCache", "SmartCache\SmartCache.csproj", "{B14C9B8F-3526-49B1-945F-370D849F59EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{4C05CB15-2EA9-43CF-B93A-302E14665EEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVLTree", "AVLTree\AVLTree.csproj", "{2176AEF8-7E6E-4184-A20D-E47495412201}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B14C9B8F-3526-49B1-945F-370D849F59EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14C9B8F-3526-49B1-945F-370D849F59EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14C9B8F-3526-49B1-945F-370D849F59EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14C9B8F-3526-49B1-945F-370D849F59EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C05CB15-2EA9-43CF-B93A-302E14665EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C05CB15-2EA9-43CF-B93A-302E14665EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C05CB15-2EA9-43CF-B93A-302E14665EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C05CB15-2EA9-43CF-B93A-302E14665EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2176AEF8-7E6E-4184-A20D-E47495412201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2176AEF8-7E6E-4184-A20D-E47495412201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2176AEF8-7E6E-4184-A20D-E47495412201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2176AEF8-7E6E-4184-A20D-E47495412201}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8CE48C2D-3979-4657-AB5B-7A26AEBC2EE9}
+	EndGlobalSection
+EndGlobal
