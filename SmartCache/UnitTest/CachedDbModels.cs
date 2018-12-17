@@ -7,36 +7,53 @@ namespace UnitTest
 {
 
     public class Db : CacheDB
-    {
-        DictionaryCachedType<Guid, Company> companies = new DictionaryCachedType<Guid, Company>("Id");
-        DictionaryCachedType<Guid, Employer> employer = new DictionaryCachedType<Guid, Employer>("Id");
-        DictionaryCachedType<Guid, Project> projects = new DictionaryCachedType<Guid, Project>("Id");
+    {        
+        public CachedModel<Company, Guid> Companies { get; private set; }
 
-        public DictionaryCachedType<Guid, Company> Companies { get => companies; }
+        public CachedModel<Employer, Guid> Employer { get; private set; }
 
-        public DictionaryCachedType<Guid, Employer> Employer { get => employer; }
+        public CachedModel<Project, Guid> Projects { get; private set; }
 
-        public DictionaryCachedType<Guid, Project> Projects { get => projects; }
+        public Db()
+        {
+            Companies =
+                CachedModel.Create<Company>()
+                .SetPrimaryKey(x => x.Id)
+                .Build<Guid>();
+
+            Employer =
+                CachedModel.Create<Employer>()
+                .SetPrimaryKey(x => x.Id)
+                .Build<Guid>();
+
+            Projects =
+                CachedModel.Create<Project>()
+                .SetPrimaryKey(x => x.Id)
+                .Build<Guid>();
+
+            Initialize();
+        }
+
     }
 
     public class Company
     {
-        Guid Id;
-        public string Name;
-        public Employer employer;
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Employer[] employer { get; set; }
     }
 
     public class Employer
     {
-        Guid Id;
-        public string Name;
-        public Project project;
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Project[] project { get; set; }
     }
 
     public class Project
     {
-        Guid Id;
-        public string Name;
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 
 }

@@ -661,9 +661,9 @@ namespace AVLTree
         }
 
 
-        public TValue[] GetValuesSorted(bool ascendant = true)
+        public TValue[] GetValuesSorted(bool ascendant = true, int max = -1)
         {
-            var result = new TValue[count];
+            var result = new TValue[max == -1 ? count : max];
             if (ascendant)
             {
                 GetValuesSortedAscendant(_root, result, 0);
@@ -677,7 +677,7 @@ namespace AVLTree
 
         void GetValuesSortedAscendant(AVLNode<TKey, TValue> node, TValue[] array, int? pos)
         {
-            if (node == null)
+            if (node == null || pos >= array.Length)
                 return;
 
             GetValuesSortedAscendant(node.Left, array, pos);
@@ -688,7 +688,7 @@ namespace AVLTree
 
         void GetValuesSortedDescendant(AVLNode<TKey, TValue> node, TValue[] array, int? pos)
         {
-            if (node == null)
+            if (node == null || pos >= array.Length)
                 return;
 
             GetValuesSortedDescendant(node.Right, array, pos);

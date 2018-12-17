@@ -1,5 +1,6 @@
 ﻿using AVLTree;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,11 +16,16 @@ namespace SmartCache
         protected Type Type;
         protected CacheDB Db;
 
-        protected string[] TypesCached;
+        protected Type[] TypesCached;
 
-        public CachedType()
+        internal CachedType()
         {
             Type = typeof(T);            
+        }
+
+        internal Type GetDataType()
+        {
+            return Type;
         }
 
         protected void ThrowIfNotInitialized()
@@ -44,9 +50,27 @@ namespace SmartCache
 
                 var properties = Type.GetProperties();
 
-                var res = enumerable.Where(s => properties.Any(p => p.PropertyType.Name == s));
+                var res = enumerable.Where(s => properties.Any(p => p.PropertyType == s||implementsIEnumerable(p.PropertyType, s)));
                 TypesCached = res.ToArray();
+
+                isInitialized = true;
             }
+        }
+
+        internal protected bool implementsIEnumerable(Type type, Type genericType)
+        {
+            var enumerables = type.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            if (enumerables.Count() == 0)
+                return false;
+
+            var enumerable = enumerables.First();
+            return enumerable.GenericTypeArguments[0] == genericType;
+        }
+
+        public virtual IEnumerable<T> GetItems()
+        {
+            ThrowIfNotInitialized();
+            return null;
         }
 
         public virtual void Add(T item)
@@ -63,56 +87,5 @@ namespace SmartCache
         {
             ThrowIfNotInitialized();
         }
-
     }
-
-    public class DictionaryCachedType<Key, T> : CachedType<T>
-    {
-
-        protected PropertyInfo PrimaryKeyInfo;
-        protected AVLTree<Key, T> PrimaryKeyTree;
-
-        public DictionaryCachedType(string primaryKey)
-        {
-            PrimaryKeyInfo = Type.GetProperty(primaryKey);
-            PrimaryKeyTree = new AVLTree<Key, T>();
-        }
-
-        T this[Key index]
-        {
-            get
-            {
-                T result;
-                var exist = TryToGet(index, out result);
-                if (!exist)
-                    throw new KeyNotFoundException($"No object found with primary key{result}");
-
-                return result;
-            }
-        }
-
-        public bool TryToGet(Key key, out T result)
-        {
-            return PrimaryKeyTree.TryGetValue(key, out result);
-        }
-
-        public override void Add(T item)
-        {
-            base.Add(item);
-
-            var value = (Key)PrimaryKeyInfo.GetValue(item);
-            
-            foreach(var cached in TypesCached)
-            {
-                var properties = Type.GetProperties().Where(p=>p.PropertyType.Name == cached);
-
-                foreach(var p in properties)
-                {
-                    var val = p.GetValue(Type);
-                    Db.UpdateCachedType(cached, val);
-                }                  
-            }
-        }
-    }
-
 }

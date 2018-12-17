@@ -8,43 +8,61 @@ namespace SmartCache
 {
     public class CacheDB
     {
-        string[] cachedTypes;
-        Dictionary<string, object> cachedValues;
+        Type[] cachedTypes;
+        Dictionary<Type, object> cachedValues;
 
         public CacheDB()
         {
+            
+        }
+
+        protected void Initialize()
+        {
             var type = this.GetType();
-            cachedValues = new Dictionary<string, object>();
+            cachedValues = new Dictionary<Type, object>();
 
             var properties = type.GetProperties();
-            cachedTypes = properties.Select(t => t.PropertyType.Name).ToArray();
+            cachedTypes = new Type[properties.Length];
 
+            var index = 0;
             foreach (var prop in properties)
             {
-                var value = prop.GetValue(prop);
-                cachedValues.Add(prop.Name, value);
+                var value = prop.GetValue(this);
+                var GetTypeMethod = value.GetType().GetMethod("GetDataType", BindingFlags.Instance | BindingFlags.NonPublic);
+                var t = GetTypeMethod.Invoke(value, new object[0]) as Type;
+
+                cachedTypes[index] = t;
+                cachedValues.Add(t, value);
+                index++;
+            }
+
+            foreach (var c in cachedValues)
+            {
+                var value = c.Value;
+                var GetTypeMethod = value.GetType().GetMethod("Initialize", BindingFlags.Instance | BindingFlags.NonPublic);
+                GetTypeMethod.Invoke(value, new object[] { this });
             }
         }
 
-        internal void UpdateCachedType(string name, object value)
+        internal void UpdateCachedType(Type t, object value)
         {
-            var cachedType = cachedValues[name];
-            var type = cachedTypes.GetType();
-            var AddMethod = type.GetMethod("Add");
+            var cachedType = cachedValues[t];
+            var type = cachedType.GetType();
+            var AddMethod = type.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance);
 
             AddMethod.Invoke(cachedType, new[] { value });
         }
 
-        internal void RemoveCachedType(string name, object value)
+        internal void RemoveCachedType(Type t, object value)
         {
-            var cachedType = cachedValues[name];
-            var type = cachedTypes.GetType();
+            var cachedType = cachedValues[t];
+            var type = cachedType.GetType();
             var RemoveMethod = type.GetMethod("Remove");
 
             RemoveMethod.Invoke(cachedType, new[] { value });
         }
 
-        internal IEnumerable<string> GetCachedTypes()
+        internal IEnumerable<Type> GetCachedTypes()
         {
             return cachedTypes;
         }

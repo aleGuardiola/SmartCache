@@ -179,6 +179,26 @@ namespace AVLTree
             }
         }
 
+        public TValue[] GetSortedArrayAscendent()
+        {
+            return _binaryTree.GetValuesSorted(true);
+        }
+
+        public TValue[] GetSortedArrayDescendent()
+        {
+            return _binaryTree.GetValuesSorted(false);
+        }
+
+        public TValue[] GetSortedArrayAscendent(int count)
+        {
+            return _binaryTree.GetValuesSorted(true, count);
+        }
+
+        public TValue[] GetSortedArrayDescendent(int count)
+        {
+            return _binaryTree.GetValuesSorted(false, count);
+        }
+
         class DictionaryEnumarator : IDictionaryEnumerator
         {
             KeyValuePair<TKey, TValue>[] items;
