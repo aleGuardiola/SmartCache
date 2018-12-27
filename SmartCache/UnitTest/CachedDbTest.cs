@@ -22,7 +22,7 @@ namespace UnitTest
                 var company = new Company
                 {
                      Id = Guid.NewGuid(),
-                      Name="fuckyou",
+                      Name="dhfajdkd",
                     employer = new Employer[]
                      {
                           new Employer()

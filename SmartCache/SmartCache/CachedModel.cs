@@ -22,17 +22,20 @@ namespace SmartCache
         protected PropertyInfo PrimaryKeyInfo;
         protected AVLTree<Key, T> PrimaryKeyTree;
 
-        Dictionary<PropertyInfo, object> indexes;
+        Dictionary<PropertyInfo, object> uniqueIndexes;
 
         internal CachedModel(string primaryKey)
         {
             PrimaryKeyInfo = Type.GetProperty(primaryKey);
             PrimaryKeyTree = new AVLTree<Key, T>();
+            uniqueIndexes = new Dictionary<PropertyInfo, object>();
         }
         
         internal void AddUniqueIndex<IndexType>(string propertyName)
         {
-
+            var propInfo = Type.GetProperty(propertyName);
+            var tree = new AVLTree<IndexType, T>();
+            uniqueIndexes[propInfo] = tree;
         }
 
         public T this[Key index]
